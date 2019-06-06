@@ -1,0 +1,19 @@
+-r requirements.txt
+
+coverage==4.5.3
+filelock==3.0.12
+importlib-metadata==0.18
+isort==4.3.20
+mccabe==0.6.1
+pluggy==0.12.0
+py==1.8.0
+pycodestyle==2.5.0
+pydocstyle==3.0.0
+pyflakes==2.1.1
+pylama==7.7.1
+six==1.12.0
+snowballstemmer==1.2.1
+toml==0.10.0
+tox==3.12.1
+virtualenv==16.6.1
+zipp==0.5.1
