@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.template import Context
 from django.template.context import make_context
 
@@ -15,7 +16,7 @@ class HtmlTemplate:
 
 
 class HtmlEngine(AbstractEngine):
-    app_dirname = 'html'
+    app_dirname = getattr(settings, 'HTML_ENGINE_APP_DIRNAME', 'html')
     template_class = HtmlTemplate
 
     def get_template_content(self, template_name):
