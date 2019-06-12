@@ -1,7 +1,80 @@
 [![Build Status](https://travis-ci.org/Terralego/django-template-pdf.svg?branch=master)](https://travis-ci.org/Terralego/django-template-pdf)
 
 # django-template-pdf
-Django template, reponse and view to generate PDF
+Django template, response and view to generate PDF
+
+# Quick start
+
+## Template backends
+
+### Create your own backend
+
+An abstract template engine is at your disposal, you can use it by importing it as follows:
+
+```
+from template_pdf.backends.abstract import AbstractEngine
+```
+
+Some functions that can help you build your engine can be imported as follows:
+
+```
+from template_pdf.backends.utils import ...
+```
+
+We advice you to create a module named `backends`.
+
+For more information and examples, please read the doc.
+
+### Use a specific template backend
+
+In the settings modify:
+
+```
+INSTALLED_APPS = [
+    ...
+    'template_pdf',
+]
+
+...
+
+TEMPLATES = [
+    {
+        'BACKEND': 'template_pdf.backends.odt.OdtEngine',
+        'DIRS': [
+        ],
+        'APP_DIRS': True,
+    },
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+```
+
+You can now create a detailed view as follows:
+
+```
+from django.views.generic.detail import DetailView
+from .models import YourModel
+
+
+class TemplateView(DetailView):
+    model = YourModel
+    template_name = 'template.odt'
+    content_type = 'application/pdf'
+```
+
+For more information and examples, please read the doc.
 
 # Good practices
 
