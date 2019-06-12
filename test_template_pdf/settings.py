@@ -40,6 +40,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'template_pdf',
+
+    'test_template_pdf',
 ]
 
 MIDDLEWARE = [
