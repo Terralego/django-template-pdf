@@ -5,6 +5,27 @@ Django template, response and view to generate PDF
 
 # Quick start
 
+## Pdf converter
+
+### Description
+
+The pdf converter is a tool that will allow you to convert LibreOffice or Html documents to pdf.
+
+### Installation
+
+To start the local server, you must first create the Docker image.
+If you are at the root of the project, run the following command:
+
+```
+docker build -t server ./template_pdf/pdf_convertor
+```
+
+Once done, you can launch a container by executing the following command:
+
+```
+docker run -itd -p "127.0.0.1:9999:9999" server
+```
+
 ## Template backends
 
 ### Create your own backend

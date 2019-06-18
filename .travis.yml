@@ -1,5 +1,12 @@
+dist: xenial
 language: python
 python:
   - "3.6"
-install: pip install tox
+services:
+  - docker
+install:
+  - pip install tox
+before_script:
+  - docker build -t server ./template_pdf/pdf_convertor/
+  - docker run -itd -p "127.0.0.1:9999:9999" server
 script: tox
