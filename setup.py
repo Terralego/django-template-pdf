@@ -42,4 +42,9 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     install_requires=get_requires(),
+    entry_points={
+        'console_scripts': [
+            'convertor = template_pdf.pdf_convertor.server:main'
+        ],
+    },
 )
