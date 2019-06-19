@@ -56,6 +56,10 @@ MIDDLEWARE = [
 
 TEMPLATES = [
     {
+        'BACKEND': 'template_pdf.backends.odt.OdtEngine',
+        'APP_DIRS': True,
+    },
+    {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
         'APP_DIRS': True,

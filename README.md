@@ -82,17 +82,16 @@ TEMPLATES = [
 ]
 ```
 
-You can now create a detailed view as follows:
+You can now create a view as follows:
 
 ```
-from django.views.generic.detail import DetailView
+from template_pdf.views import AbstractTemplateToPdfView
+
 from .models import YourModel
 
 
-class TemplateView(DetailView):
+class TemplateView(AbstractTemplateToPdfView):
     model = YourModel
-    template_name = 'template.odt'
-    content_type = 'application/pdf'
 ```
 
 For more information and examples, please read the doc.
