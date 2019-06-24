@@ -125,3 +125,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_ACCEL_REDIRECT = False
+
+ROOT_URLCONF = 'template_pdf.urls'
