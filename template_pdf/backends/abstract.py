@@ -1,5 +1,5 @@
 from glob import glob
-from os.path import join
+from os.path import isfile, join
 
 from django.template import Template
 from django.template.backends.base import BaseEngine
@@ -33,6 +33,8 @@ class AbstractEngine(BaseEngine):
         Check if a template named ``template_name`` can be found in a list of directories. Returns \
 the path if the file exists or raises ``TemplateDoesNotExist`` otherwise.
         """
+        if isfile(template_name):
+            return template_name
         template_path = None
         for directory in self.template_dirs:
             abstract_path = join(directory, template_name)
