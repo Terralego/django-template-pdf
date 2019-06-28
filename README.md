@@ -4,6 +4,44 @@
 Django template, response and view to generate PDF
 
 # Quick start
+## Document template
+
+A model is available to store the templates. It contains the following fiels:
+* `name`, `CharField`,
+* `format`, `CharField` (html, odt, ott, oth, odm, otm, odg, otg, odp, otp, ods, ots, odc, odf, odi),
+* `documenttemplate`, `FileField`,
+* `content_type`, `ForeignKey(ContentType)`,
+
+You can use it by adding in the settings:
+
+```
+INSTALLED_APP = [
+    ...
+    'template_pdf',
+]
+```
+
+## Document view
+
+A document template view set is available. It will allow you to create, update, retrieve, list or delete document templates. But also to list all the templates disponible for a content type or to fill a specific template with a specific object and get it as a pdf.
+
+You can use it by adding in the settings:
+
+```
+INSTALLED_APP = [
+    ...
+    'template_pdf',
+]
+```
+
+and in the urls.py file:
+
+```
+urlpatterns = [
+    ...
+    path('...', include('template_pdf.urls')),
+]
+```
 
 ## Pdf converter
 
