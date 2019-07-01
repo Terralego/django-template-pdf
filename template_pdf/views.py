@@ -31,13 +31,13 @@ class AbstractTemplateToPdfView(AbstractTemplateResponseMixin, SingleObjectMixin
     content_type = 'application/pdf'
 
 
-class DocumentTemplateViewSet(ModelViewSet, SingleObjectMixin):
+class DocumentTemplateViewSet(ModelViewSet):
     queryset = DocumentTemplate.objects.all()
     permission_classes = (IsAuthenticated, )
     serializer_class = DocumentTemplateSerializer
 
 
-class EnrichDocumentTemplateViewSet(DocumentTemplateViewSet):
+class EnrichDocumentTemplateViewSet(DocumentTemplateViewSet, SingleObjectMixin):
     response_class = ToPdfResponse
     content_type = 'application/pdf'
     object = None
