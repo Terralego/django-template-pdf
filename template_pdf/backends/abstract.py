@@ -1,16 +1,24 @@
 from glob import glob
 from os.path import isdir, isfile, join
 
-from django.template import Template
+from django.conf import settings
 from django.template.backends.base import BaseEngine
+from django.template.engine import Engine
 from django.template.loader import TemplateDoesNotExist
 from django.utils.functional import cached_property
+
+from template_pdf.exceptions import BadTemplate
+
+
+class InvalidString(str):
+    def __mod__(self, other):
+        raise BadTemplate(other)
 
 
 class AbstractEngine(BaseEngine):
     """
     Gives the architecture of a basic template engine and two methods implemented:
-    ``get_template_path`` and ``from_string``.
+    ``get_templates_path`` and ``from_string``.
 
     Can be specified:
     * ``app_dirname``, the folder name which contains the templates in application directories,
@@ -21,12 +29,19 @@ class AbstractEngine(BaseEngine):
     """
     app_dirname = None
     sub_dirname = None
-    template_class = None
 
     def __init__(self, params):
         params = params.copy()
-        self.options = params.pop('OPTIONS')
+        options = params.pop('OPTIONS').copy()
+
         super().__init__(params)
+
+        options.setdefault('autoescape', True)
+        options.setdefault('debug', settings.DEBUG)
+        options.setdefault('file_charset', settings.FILE_CHARSET)
+        options['string_if_invalid'] = InvalidString('%s')
+
+        self.engine = Engine(self.dirs, self.app_dirs, **options)
 
     @cached_property
     def template_dirs(self):
@@ -38,25 +53,24 @@ class AbstractEngine(BaseEngine):
         return t_dirs
 
     def from_string(self, template_code, **kwargs):
-        return self.template_class(Template(template_code), **kwargs)
+        raise NotImplementedError()
 
-    def get_template_path(self, template_name):
+    def get_templates_path(self, template_name):
         """
         Check if a template named ``template_name`` can be found in a list of directories. Returns
         the path if the file exists or raises ``TemplateDoesNotExist`` otherwise.
         """
         if isfile(template_name):
-            return template_name
-        template_path = None
+            return [template_name]
+        templates_path = []
         for directory in self.template_dirs:
             abstract_path = join(directory, template_name)
             path = glob(abstract_path)
             if path:
-                template_path = path[0]
-                break
-        if template_path is None:
+                templates_path += path
+        if not templates_path:
             raise TemplateDoesNotExist(f'Unknown: {template_name}')
-        return template_path
+        return templates_path
 
     def get_template(self, template_name):
         raise NotImplementedError()

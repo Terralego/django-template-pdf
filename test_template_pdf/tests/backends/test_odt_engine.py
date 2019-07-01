@@ -19,68 +19,61 @@ class TestOdtEngine(TestCase):
             'NAME': 'odt',
             'DIRS': [],
             'APP_DIRS': True,
-            'OPTIONS': [],
+            'OPTIONS': {},
         }
         self.odt_engine = OdtEngine(self.params)
 
-    def test_get_template_path_works(self):
-        self.assertEqual(self.odt_engine.get_template_path(ODT_TEMPLATE_PATH), ODT_TEMPLATE_PATH)
-        self.assertEqual(self.odt_engine.get_template_path('template.odt'), ODT_TEMPLATE_PATH)
+    def test_get_templates_path_works(self):
+        self.assertEqual(self.odt_engine.get_templates_path(ODT_TEMPLATE_PATH), [ODT_TEMPLATE_PATH])
+        self.assertEqual(self.odt_engine.get_templates_path('template.odt'), [ODT_TEMPLATE_PATH])
 
         params_no_specified_dirs_no_app_dirs = {
             'NAME': 'odt',
             'DIRS': [],
             'APP_DIRS': False,
-            'OPTIONS': [],
+            'OPTIONS': {},
         }
         odt_engine_no_specified_dirs_no_app_dirs = OdtEngine(params_no_specified_dirs_no_app_dirs)
         with self.assertRaises(TemplateDoesNotExist):
-            odt_engine_no_specified_dirs_no_app_dirs.get_template_path('template.odt')
+            odt_engine_no_specified_dirs_no_app_dirs.get_templates_path('template.odt')
 
         params_dirs_specified = {
             'NAME': 'odt',
             'DIRS': [join(APP_PATH, 'templates')],
             'APP_DIRS': False,
-            'OPTIONS': [],
+            'OPTIONS': {},
         }
         odt_engine_dirs_specified = OdtEngine(params_dirs_specified)
-        self.assertEqual(odt_engine_dirs_specified.get_template_path('template.odt'),
-                         ODT_TEMPLATE_PATH)
+        self.assertEqual(odt_engine_dirs_specified.get_templates_path('template.odt'),
+                         [ODT_TEMPLATE_PATH])
 
         params_app_dirs_specified = {
             'NAME': 'odt',
             'DIRS': [],
             'APP_DIRS': True,
-            'OPTIONS': [],
+            'OPTIONS': {},
         }
         odt_engine_app_dirs_specified = OdtEngine(params_app_dirs_specified)
-        self.assertEqual(odt_engine_app_dirs_specified.get_template_path('template.odt'),
-                         ODT_TEMPLATE_PATH)
+        self.assertEqual(odt_engine_app_dirs_specified.get_templates_path('template.odt'),
+                         [ODT_TEMPLATE_PATH])
 
         params_bad_dirs_app_dirs_specified = {
             'NAME': 'odt',
             'DIRS': ['bad/path'],
             'APP_DIRS': True,
-            'OPTIONS': [],
+            'OPTIONS': {},
         }
         odt_engine_bad_dirs_app_dirs_specified = OdtEngine(params_bad_dirs_app_dirs_specified)
-        self.assertEqual(odt_engine_bad_dirs_app_dirs_specified.get_template_path('template.odt'),
-                         ODT_TEMPLATE_PATH)
+        self.assertEqual(odt_engine_bad_dirs_app_dirs_specified.get_templates_path('template.odt'),
+                         [ODT_TEMPLATE_PATH])
 
-    def test_get_template_path_bad_template_name(self):
+    def test_get_templates_path_bad_template_name(self):
         with self.assertRaises(TemplateDoesNotExist):
-            self.odt_engine.get_template_path('bad_name')
-
-    def test_get_template_content_works(self):
-        with open(CONTENT_SCREENSHOT_PATH, 'r') as read_file:
-            self.assertEqual(self.odt_engine.get_template_content(ODT_TEMPLATE_PATH),
-                             read_file.read())
+            print(self.odt_engine.get_templates_path('bad_name'))
 
     def test_get_template_works(self):
         template = self.odt_engine.get_template('template.odt')
         self.assertIsInstance(template, OdtTemplate)
-        self.assertIsInstance(template.template, Template)
-        self.assertEqual(template.template_path, ODT_TEMPLATE_PATH)
 
     def test_render(self):
         class Obj:
